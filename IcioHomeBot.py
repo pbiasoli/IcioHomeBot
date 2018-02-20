@@ -15,15 +15,18 @@ import random
 import datetime
 import telepot
 import json
+import urllib
 import RPi.GPIO as GPIO
 from w1thermsensor import W1ThermSensor
 
 # Variables from json
 with open("IcioHomeBotVar.json") as json_file:
   IcioHomeBotVar = json.load(json_file)
-	token = IcioHomeBotVar['token']
-	latitude = IcioHomeBotVar['latitude']
+  token = IcioHomeBotVar['token']
+  latitude = IcioHomeBotVar['latitude']
   longitude = IcioHomeBotVar['longitude']
+  openweathermap_city_id = IcioHomeBotVar['openweathermap_city_id']
+  openweathermap_app_id = IcioHomeBotVar['openweathermap_app_id']
   W1ThermSensorID1 = IcioHomeBotVar['W1ThermSensorID1']
 
 #LED
@@ -75,7 +78,11 @@ def handle(msg):
         bot.sendMessage(chat_id, 'Blink End')
     elif command =='temp':
         temperature_in_celsius = sensor.get_temperature()
-        bot.sendMessage(chat_id, 'Temperature is: ' + str(temperature_in_celsius))
+	owm_url = 'http://api.openweathermap.org/data/2.5/weather?id=' + openweathermap_city_id + '&units=metric&appid=' + openweathermap_app_id
+	owm_response = urllib.urlopen(owm_url)
+	owm_data = json.loads(owm_response.read())	
+	owm_external_temperature = owm_data['main']['temp']
+        bot.sendMessage(chat_id, 'Temperature inside is ' + str(temperature_in_celsius) + ', outside is ' + str(owm_external_temperature))
     else:
         bot.sendMessage(chat_id, 'I do not understand... :(')
 
