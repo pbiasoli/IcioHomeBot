@@ -2,5 +2,7 @@
 	"token": "TOKEN_ASSIGNED_BY_BOTFATHER",
 	"latitude": "YOUR_LATITUDE",
 	"longitude": "YOUR_LONGITUDE",
+	"openweathermap_city_id": "YOUR_CITY_ID",
+	"openweathermap_app_id": "YOUR_APP_ID",
 	"W1ThermSensorID1": "SENSOR_ID"
 }
